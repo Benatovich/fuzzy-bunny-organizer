@@ -45,7 +45,7 @@ function displayFamilies(families) {
             bunnyEl.addEventListener('click', async() => {
                 await deleteBunny(bunny.id);
 
-                const updatedFamilies = await getfamilies();
+                const updatedFamilies = await getFamilies();
 
                 displayFamilies(updatedFamilies);
             });
