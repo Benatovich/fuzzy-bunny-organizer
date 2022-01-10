@@ -9,6 +9,10 @@ export async function getUser() {
 
 export async function getFamilies() {
     // fetch all families and their bunnies
+    .from('loving_families')
+    .select('*, fuzzy_bunnies (*)')
+    // ^should only fetch bunnies created by the current account
+    .match({ 'fuzzy_bunnies.user_id': client.auth.session().user.id });
 
     return checkError(response);    
 }
