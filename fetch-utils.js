@@ -3,18 +3,29 @@ const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiIsI
 
 const client = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
+
 export async function getUser() {
     return client.auth.session();
 }
 
 export async function getFamilies() {
     // fetch all families and their bunnies
+    const response = await client
+        .from('loving_families')
+        .select('*, fuzzy_bunnies (*)')
+    // ^should only fetch bunnies created by the current account
+        .match({ 'fuzzy_bunnies.user_id': client.auth.session().user.id });
 
     return checkError(response);    
 }
 
 export async function deleteBunny(id) {
     // delete a single bunny using the id argument
+    const response = await client
+        .from('fuzzy_bunnies')
+        .delete()
+        .match({ id: id })
+        .single();
 
     return checkError(response);    
 }
@@ -22,11 +33,15 @@ export async function deleteBunny(id) {
 
 export async function createBunny(bunny) {
     // create a bunny using the bunny argument
-
+    const response = await client
+        .from('fuzzy_bunnies')
+        .insert({
+            ...bunny,
+            user_id: client.auth.session().user.id,
+        });
+   
     return checkError(response);    
 }
-
-
 
 export async function checkAuth() {
     const user = await getUser();
@@ -61,3 +76,19 @@ export async function logout() {
 function checkError({ data, error }) {
     return error ? console.error(error) : data;
 }
+
+// // I think this renderBunny function should work, but I think the way displayFamilies is written works better
+// function renderBunny(bunny) {
+//     // create a p tag
+//     const bunnyEl = document.createElement('p');
+//     // add the 'bunny' css class no matter what
+//     bunnyEl.classList.add('bunny');
+
+//     bunnyEl.textContent = bunny.name;
+
+//     bunnyEl.addEventListener('click', async() => {
+//         await deleteBunny(bunny.id);
+//         const updatedFamilies = await getFamilies();
+//         displayFamilies(updatedFamilies);
+//     });
+// }
