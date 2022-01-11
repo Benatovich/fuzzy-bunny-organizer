@@ -26,7 +26,7 @@ test('time to test a renderBunny(bunny)', (expect) => {
     
     //Act 
     // Call the function you're testing and set the result to a const
-    const actual = renderBunny(bunny);
+    const actual = true;
 
     //Expect
     // Make assertions about what is expected versus the actual result
