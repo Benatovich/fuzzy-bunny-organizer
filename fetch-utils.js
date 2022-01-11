@@ -76,3 +76,19 @@ export async function logout() {
 function checkError({ data, error }) {
     return error ? console.error(error) : data;
 }
+
+// // I think this renderBunny function should work, but I think the way displayFamilies is written works better
+// function renderBunny(bunny) {
+//     // create a p tag
+//     const bunnyEl = document.createElement('p');
+//     // add the 'bunny' css class no matter what
+//     bunnyEl.classList.add('bunny');
+
+//     bunnyEl.textContent = bunny.name;
+
+//     bunnyEl.addEventListener('click', async() => {
+//         await deleteBunny(bunny.id);
+//         const updatedFamilies = await getFamilies();
+//         displayFamilies(updatedFamilies);
+//     });
+// }
